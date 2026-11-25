@@ -1,66 +1,66 @@
 # Intelligent Project Management Agent
 
-An AI-assisted project planner for software development teams. It accepts project requirements, deadlines and team skills, then decomposes work, estimates effort, allocates resources and generates a schedule. It also stores project memory and updates plans when requirements change.
+A working Python and Streamlit prototype that turns software project requirements, deadlines, and team skills into a reviewed schedule. The application uses Groq-hosted Llama when an API key is configured; without it, a deterministic planner keeps the core workflow demonstrable.
 
-## Features
+## What it demonstrates
 
-- Task decomposition into phases and subtasks
-- Prompt chaining: requirement analysis → decomposition → estimation → review
-- ReAct-style tool workflow: allocate resources → schedule tasks → validate dependencies → review observations
-- Skill-based team allocation with workload balancing
-- Working-day schedule generation and deadline feasibility check
-- Persistent JSON project memory
-- Dynamic requirement updates with change history
-- CSV export
-- Rule-based fallback if Groq API is not configured or unavailable
+| Rubric concept | Implementation |
+| --- | --- |
+| Role and system prompting | A project-manager role and stable safety rules are sent on every model request. |
+| Zero-shot prompting | Requirements are analyzed without a worked example. |
+| One-shot prompting | A single small-project example sets task decomposition shape and granularity. |
+| Few-shot prompting | Two examples calibrate effort-estimation style. |
+| Structured output | Groq JSON mode is followed by local validators for types, required fields, limits, IDs, dependency references, and cycles. |
+| Step-back reasoning | A high-level principles/constraints pass precedes requirements analysis. |
+| Prompt chaining | Step-back → analysis → decomposition → estimation → Python tools → plan review. |
+| ReAct-style tool use | Python allocation, dependency-validation, and scheduling actions produce an inspectable action/observation trace. |
+| Response evaluation | Six deterministic checks score task presence, IDs, durations, dependencies, assignments, and schedule feasibility metadata. |
+| Error handling | Invalid inputs are rejected; model/API/JSON/validation failures produce a visible warning and a deterministic fallback. |
 
-## Requirements
+The app does **not** request or expose private chain-of-thought. It shows concise outputs, assumptions, validation results, and observable Python tool actions instead.
+
+## Architecture
+
+1. `app.py` provides the Streamlit dashboard, project form, schedule, persistent history, and Prompt Lab.
+2. `agent.py` validates input, builds the prompt chain, calls the configured LLM, validates every structured response, and chooses a visible fallback when a stage fails.
+3. `scheduler.py` assigns tasks by skill overlap, validates dependency references, and computes working-day schedule dates.
+4. `memory.py` stores project plans and update history in local JSON under `data/projects.json`.
+5. `prompts.py` contains the role/system instructions, planning prompts, worked examples, Prompt Lab demos, and technique descriptions.
+
+The model suggests requirements, tasks, dependencies, and estimates. Python performs allocation and scheduling so those steps are explicit and repeatable. Generated plans are planning aids and need human review.
+
+## Setup
+
+### Requirements
 
 - Python 3.10+
-- A Groq API key (optional, but recommended for AI-generated plans)
-
-## Run in VS Code
-
-1. Extract the ZIP file.
-2. Open the extracted `intelligent_project_management_agent` folder in VS Code.
-3. Open the VS Code terminal.
-4. Create and activate a virtual environment.
+- A Groq API key for LLM-backed planning (optional; deterministic fallback works without one)
 
 ### Windows PowerShell
 
 ```powershell
 python -m venv .venv
 .venv\Scripts\Activate.ps1
-```
-
-If PowerShell blocks activation, run:
-
-```powershell
-Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-.venv\Scripts\Activate.ps1
-```
-
-5. Install dependencies:
-
-```powershell
 pip install -r requirements.txt
-```
-
-6. Create your `.env` file:
-
-```powershell
 Copy-Item .env.example .env
 ```
 
-Open `.env` and replace `your_groq_api_key_here` with your own Groq API key. Never share or upload your API key.
+Add your own key to `.env`:
 
-7. Start the app:
+```text
+GROQ_API_KEY=your_groq_api_key_here
+GROQ_MODEL=llama-3.3-70b-versatile
+```
+
+Keep `.env` private; it is ignored by Git. When configured, project requirements and team information are sent to the Groq API for planning. With no key, the app uses deterministic fallback tasks and does not make model requests.
+
+Start the app:
 
 ```powershell
 streamlit run app.py
 ```
 
-The app opens in your browser, usually at `http://localhost:8501`.
+Open the local URL printed by Streamlit, usually `http://localhost:8501`.
 
 ## Team input format
 
@@ -70,44 +70,80 @@ Enter one team member per line:
 Name | skill1, skill2, skill3 | availability percentage
 ```
 
-Example:
+For example:
 
 ```text
 Aarav | Python, FastAPI, SQL | 100
 Priya | React, JavaScript, UI/UX | 100
 Rahul | Testing, API testing, QA | 80
-Meera | Database, SQL, DevOps | 70
 ```
 
-## How the agent works
+Availability can be omitted (it defaults to 100). Names must be unique; availability must be a whole number from 1 to 100.
 
-1. **Requirement analysis:** the LLM extracts deliverables, assumptions and risks.
-2. **Task decomposition:** the LLM breaks the project into task-sized units.
-3. **Estimation:** the LLM reviews duration and dependency estimates.
-4. **ReAct-style execution:** Python tools allocate resources, generate dates and validate dependencies. Tool observations are passed to the review prompt.
-5. **Memory:** plans and change history are saved in `data/projects.json`.
-6. **Dynamic updates:** a change request is compared with the saved plan, then the task list and schedule are regenerated. Completed tasks with matching IDs retain their completed status.
+## Prompt design and reasoning workflow
 
-## Project structure
+The shared system prompt sets the delivery-manager role, treats project inputs as untrusted data, disallows secret disclosure, and asks for concise JSON rather than private reasoning traces.
+
+For a new plan, the stages are:
+
+1. **Step-back:** identify general delivery principles, constraints, and questions before solving the specific project.
+2. **Zero-shot requirement analysis:** extract deliverables, requirements, assumptions, and risks without an example.
+3. **One-shot decomposition:** use one small worked example to guide task granularity; adapt the example rather than copying its subject.
+4. **Few-shot estimation:** use two estimate examples to calibrate working-day estimates while retaining the task IDs and titles.
+5. **Tool execution:** allocate team members, validate dependency references, and build the schedule.
+6. **Structured review:** inspect tool observations for risks and deadline pressure.
+
+The Prompt Lab runs zero-shot, one-shot, and few-shot examples separately. Try its incomplete brief, instruction-like text, and tight-constraint inputs, or enter a custom request.
+
+## Input handling, security, and evaluation
+
+- Project names, descriptions, changes, dates, team sizes, skills, availability, task counts, and task fields are bounded and validated before use.
+- Instruction-like text is passed as JSON project data, not concatenated into the system message. The system prompt explicitly says not to follow embedded override requests; the UI also flags common override patterns.
+- Model output is parsed as JSON and checked before any allocation or schedule tool runs. Invalid output is not silently accepted.
+- API failures, malformed JSON, and invalid model output use deterministic fallback data with an explicit warning. Logs do not include prompts, API keys, or raw request content.
+- API credentials are read from `.env`; do not commit credentials or real sensitive project data.
+- The displayed score is a structural/consistency check, not a measure of semantic correctness or a guarantee that estimates are accurate.
+- Groq receives the project data when LLM mode is enabled. Review provider privacy terms and avoid entering confidential data unless authorized.
+
+## Tests
+
+Run the standard-library test suite from the project root:
+
+```powershell
+python -m unittest discover -s tests -v
+```
+
+The tests cover fallback plan generation, plan evaluation and tool traces, incomplete and oversized input, malformed team/deadline values, instruction-like input, malformed model output, cyclic dependencies, Prompt Lab output, and preservation of completed tasks during updates.
+
+## Jury demonstration walkthrough
+
+1. Run `streamlit run app.py` and open the local workspace.
+2. Create a sample project with the example team. Show the technique chain, assigned tasks, schedule, warnings, and evaluation score.
+3. Open **Prompt Lab** and compare Zero-shot, One-shot, and Few-shot on the same brief.
+4. Try **Incomplete requirements** and **Instruction-like text** to demonstrate validation and prompt-injection handling.
+5. Inspect the prompt-chain stages and ReAct-style Python observations under the plan quality expander.
+6. Update a saved project's requirements and show its revised schedule and preserved completed work.
+7. Run the tests from the terminal to demonstrate automated handling of edge cases.
+
+If no API key is configured, explicitly identify the output as deterministic fallback rather than LLM-generated output.
+
+## Limitations and future work
+
+- Fallback tasks are generic; they keep the application usable but are not project-specific AI planning.
+- Skill matching and workload balancing are simple heuristics. The scheduler excludes weekends, but does not model holidays, partial-day capacity, or resource contention.
+- The evaluation checks structure and consistency, not factual accuracy, estimate quality, or stakeholder acceptance.
+- Project memory is a local JSON file with no authentication, concurrency control, or multi-user access controls.
+- Future improvements could add richer semantic evaluation with a reviewed benchmark, public-holiday calendars, role-based access, a database-backed multi-user store, and experiments with a small local model or LoRA adapter.
+
+## Project files
 
 ```text
-intelligent_project_management_agent/
-│
-├── app.py              # Streamlit user interface
-├── agent.py            # AI agent and prompt chaining
-├── prompts.py          # System and task prompts
-├── scheduler.py        # Resource allocation and schedule tools
-├── memory.py           # Persistent JSON memory
-├── requirements.txt    # Python dependencies
-├── .env.example        # API configuration template
-├── .gitignore
-└── README.md
+app.py              Streamlit interface
+agent.py            Prompt chain, validation, fallback, evaluation
+prompts.py          System and task prompts
+scheduler.py        Resource allocation and schedule tools
+memory.py           Local JSON project memory
+tests/test_agent.py Focused input and workflow tests
+requirements.txt    Python dependencies
+.env.example        API configuration template
 ```
-
-## Important notes
-
-- The generated plan is a planning recommendation, not a guaranteed delivery commitment.
-- Duration estimates are in working days; the basic scheduler excludes weekends but does not yet model public holidays or partial-day capacity.
-- Resource allocation is a simple skill-overlap heuristic. A real company should review workload, seniority, leave and task concurrency.
-- This prototype stores memory locally in JSON. For a production multi-user deployment, use a database with authentication and access controls.
-- The ReAct implementation uses observable tool actions and results; it does not expose private chain-of-thought.
