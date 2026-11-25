@@ -50,12 +50,24 @@ st.markdown(
         background: linear-gradient(145deg, rgba(34, 30, 52, .98), rgba(25, 23, 41, .98));
         border-color: var(--line);
         border-radius: 20px;
+        transition: transform .22s ease, border-color .22s ease, box-shadow .22s ease;
+    }
+    [data-testid="stVerticalBlockBorderWrapper"]:hover {
+        transform: translateY(-2px);
+        border-color: rgba(255, 179, 143, .34);
+        box-shadow: 0 12px 32px rgba(0, 0, 0, .18);
     }
     [data-testid="stMetric"] {
         background: linear-gradient(150deg, #242039, #1a172b);
         padding: .85rem 1rem;
         border: 1px solid var(--line);
         border-radius: 16px;
+        transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+    }
+    [data-testid="stMetric"]:hover {
+        transform: translateY(-3px);
+        border-color: rgba(255, 179, 143, .48);
+        box-shadow: 0 10px 28px rgba(255, 179, 143, .08);
     }
     [data-testid="stMetricLabel"] { color: var(--muted); font-size: .78rem; }
     [data-testid="stMetricValue"] { font-family: 'Manrope', sans-serif; color: #fff; font-size: 1.5rem; font-weight: 600; }
@@ -66,6 +78,12 @@ st.markdown(
         color: #f6f1ff;
         border-color: rgba(216, 202, 255, .26);
         background: rgba(255, 255, 255, .04);
+        transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+    }
+    [data-testid="stButton"] button:hover, [data-testid="stFormSubmitButton"] button:hover {
+        transform: translateY(-2px);
+        border-color: rgba(255, 179, 143, .7);
+        box-shadow: 0 7px 22px rgba(255, 179, 143, .12);
     }
     [data-testid="stButton"] button[kind="primary"], [data-testid="stFormSubmitButton"] button[kind="primary"] {
         background: linear-gradient(110deg, #ffc19c, #ed9bb7);
@@ -97,7 +115,7 @@ st.markdown(
     .task-label { color:#f0ebfb; font-size:.82rem; font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
     .task-sub { color:#aaa3bf; font-size:.7rem; }
     .task-track { height:12px; width:100%; background:#302b43; border-radius:10px; overflow:hidden; }
-    .task-bar { height:100%; background:linear-gradient(90deg,#b8a7ff,#ffb38f); border-radius:10px; min-width:8px; }
+    .task-bar { height:100%; background:linear-gradient(90deg,#b8a7ff,#ffb38f); border-radius:10px; min-width:8px; transition:width .7s ease, filter .2s ease; }
     .mini-line { height:1px; background:rgba(207,190,245,.13); margin:.85rem 0; }
     .empty-mark { width:48px; height:48px; border-radius:16px; display:grid; place-items:center; color:#21172b; background:linear-gradient(145deg,#ffc19c,#dd9fc8); font-size:23px; margin-bottom:1rem; }
     .empty-copy { color:var(--muted); max-width:38rem; line-height:1.6; }
@@ -114,6 +132,25 @@ st.markdown(
         border-radius:26px;
         background:linear-gradient(115deg,#241a3b 0%,#302048 50%,#8d5870 100%);
         box-shadow:0 24px 70px rgba(0,0,0,.24);
+        transition:transform .28s ease, box-shadow .28s ease, border-color .28s ease;
+    }
+    .journey-hero:hover {
+        transform:translateY(-2px);
+        border-color:rgba(255,194,157,.42);
+        box-shadow:0 28px 78px rgba(0,0,0,.3), 0 0 34px rgba(184,167,255,.08);
+    }
+    .journey-hero:before {
+        content:"";
+        position:absolute;
+        z-index:1;
+        width:38%;
+        height:150%;
+        right:10%;
+        top:-25%;
+        background:radial-gradient(ellipse,rgba(255,185,158,.18),transparent 68%);
+        filter:blur(8px);
+        pointer-events:none;
+        animation:ambient-glow 11s ease-in-out infinite alternate;
     }
     .journey-hero:after {
         content:"";
@@ -122,7 +159,11 @@ st.markdown(
         inset:0;
         background:linear-gradient(90deg,rgba(23,18,40,.98) 0%,rgba(28,20,45,.93) 40%,rgba(34,23,49,.16) 100%);
     }
-    .hero-art { position:absolute; z-index:0; right:0; bottom:0; width:72%; height:100%; }
+    .hero-art { position:absolute; z-index:0; right:0; bottom:0; width:72%; height:100%; transform-origin:center; animation:landscape-drift 24s ease-in-out infinite alternate; }
+    .hero-glow { transform-origin:650px 145px; animation:halo-pulse 8s ease-in-out infinite; }
+    .hero-sun { transform-origin:650px 145px; animation:sun-pulse 8s ease-in-out infinite; }
+    .hero-stars circle { animation:star-twinkle 4s ease-in-out infinite alternate; }
+    .hero-stars circle:nth-child(even) { animation-delay:1.5s; }
     .hero-copy { position:relative; z-index:2; max-width:58%; }
     .hero-overline { color:#e6c6d6; font-size:.67rem; font-weight:700; letter-spacing:.16em; text-transform:uppercase; }
     .hero-title { margin:.75rem 0 .65rem; font-family:'Manrope',sans-serif; color:#fff; font-size:clamp(2.2rem,4vw,3.8rem); font-weight:800; line-height:.98; letter-spacing:-.075em; }
@@ -132,7 +173,8 @@ st.markdown(
     .hero-date-label { display:block; margin-bottom:.2rem; color:#b7a9c7; font-size:.6rem; font-weight:700; letter-spacing:.15em; }
     .hero-date-value { color:#fff; font-size:.78rem; font-weight:600; }
     .hero-date-divider { width:1px; background:rgba(255,255,255,.25); }
-    .team-panel { min-height:180px; padding:1.35rem 1.5rem; border:1px solid rgba(214,191,255,.18); border-radius:20px; color:#fff; background:radial-gradient(ellipse at 82% 110%, #765271 0, #29213d 38%, #1a1729 78%); }
+    .team-panel { min-height:180px; padding:1.35rem 1.5rem; border:1px solid rgba(214,191,255,.18); border-radius:20px; color:#fff; background:radial-gradient(ellipse at 82% 110%, #765271 0, #29213d 38%, #1a1729 78%); background-size:150% 150%; animation:panel-glow 16s ease-in-out infinite alternate; transition:transform .24s ease, border-color .24s ease; }
+    .team-panel:hover { transform:translateY(-2px); border-color:rgba(255,194,157,.34); }
     .team-panel-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:1.55rem; }
     .team-panel-title { font-family:'Manrope',sans-serif; font-size:1.15rem; font-weight:600; letter-spacing:-.04em; }
     .team-panel-count { font-size:.72rem; color:#e0d7e9; border:1px solid rgba(255,255,255,.3); border-radius:999px; padding:4px 9px; }
@@ -141,12 +183,30 @@ st.markdown(
     .team-avatar { display:grid; place-items:center; width:34px; height:34px; border-radius:50%; background:linear-gradient(145deg,#ffc19c,#dd9fc8); color:#21172b; font-size:.72rem; font-weight:700; margin-bottom:.55rem; }
     .team-person-name { font-size:.8rem; font-weight:600; color:#fff; }
     .team-person-skills { color:#c2b8d0; font-size:.68rem; margin-top:.15rem; }
+    @keyframes ambient-glow { from { transform:translate3d(-9%,0,0) scale(.9); opacity:.5; } to { transform:translate3d(8%,3%,0) scale(1.1); opacity:.9; } }
+    @keyframes landscape-drift { from { transform:translate3d(0,0,0) scale(1); } to { transform:translate3d(-8px,-3px,0) scale(1.025); } }
+    @keyframes halo-pulse { 0%,100% { opacity:.42; transform:scale(.94); } 50% { opacity:.82; transform:scale(1.08); } }
+    @keyframes sun-pulse { 0%,100% { opacity:.72; transform:scale(.98); } 50% { opacity:.96; transform:scale(1.04); } }
+    @keyframes star-twinkle { from { opacity:.35; } to { opacity:1; } }
+    @keyframes panel-glow { from { background-position:0% 50%; } to { background-position:100% 50%; } }
     @media (max-width: 850px) {
         .block-container { padding: 1rem .8rem 2rem; }
         h1 { font-size:1.65rem !important; }
         .journey-hero { min-height:280px; padding:1.5rem; }
         .hero-copy { max-width:80%; }
         .hero-art { width:100%; opacity:.64; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+            animation:none !important;
+            scroll-behavior:auto !important;
+            transition:none !important;
+        }
+        .journey-hero:hover, [data-testid="stMetric"]:hover,
+        [data-testid="stVerticalBlockBorderWrapper"]:hover, .team-panel:hover,
+        [data-testid="stButton"] button:hover, [data-testid="stFormSubmitButton"] button:hover {
+            transform:none;
+        }
     }
     </style>
     """,
@@ -366,8 +426,8 @@ def render_hero(project=None):
               </radialGradient>
             </defs>
             <rect width="900" height="440" fill="url(#sky)"/>
-            <circle cx="650" cy="145" r="155" fill="url(#glow)"/>
-            <circle cx="650" cy="145" r="54" fill="#ffd1a6" opacity=".8"/>
+            <circle class="hero-glow" cx="650" cy="145" r="155" fill="url(#glow)"/>
+            <circle class="hero-sun" cx="650" cy="145" r="54" fill="#ffd1a6" opacity=".8"/>
             <path d="M245 330 455 95 570 222 684 74 900 310 900 440 210 440Z" fill="url(#ridge)" opacity=".76"/>
             <path d="m435 118 20-23 23 25-16-5-11 13-7-11-12 7Z" fill="#f3c7c0" opacity=".76"/>
             <path d="m659 102 25-28 29 32-19-7-11 13-10-12-14 8Z" fill="#f7c4b8" opacity=".72"/>
@@ -375,7 +435,7 @@ def render_hero(project=None):
             <path d="M260 389 476 303 570 359 730 248 900 351 900 440 170 440Z" fill="url(#valley)"/>
             <path d="M510 440c70-67 130-83 220-104 62-16 108-43 170-96v200Z" fill="#332642" opacity=".78"/>
             <path d="M595 440c42-46 97-55 145-66 59-14 98-33 160-75" fill="none" stroke="#ffd0ad" stroke-opacity=".42" stroke-width="3"/>
-            <g fill="#fff0df" opacity=".82">
+            <g class="hero-stars" fill="#fff0df" opacity=".82">
               <circle cx="500" cy="68" r="2"/><circle cx="565" cy="42" r="1.5"/>
               <circle cx="738" cy="57" r="2"/><circle cx="812" cy="116" r="1.5"/>
               <circle cx="580" cy="185" r="1.5"/><circle cx="840" cy="205" r="2"/>
