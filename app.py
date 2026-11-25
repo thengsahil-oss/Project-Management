@@ -15,66 +15,138 @@ st.markdown(
     @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap');
 
     :root {
-        --ink: #171717;
-        --muted: #777875;
-        --line: #e8e8e5;
-        --paper: #f0f0ee;
-        --white: #ffffff;
+        --ink: #f7f3ff;
+        --muted: #b7b0ce;
+        --line: rgba(207, 190, 245, .16);
+        --paper: #100e1a;
+        --surface: #1c192c;
+        --accent: #ffb38f;
+        --lavender: #b8a7ff;
     }
     html, body, [class*="css"] { font-family: 'DM Sans', sans-serif; color: var(--ink); }
-    [data-testid="stAppViewContainer"] { background: var(--paper); }
+    [data-testid="stAppViewContainer"] {
+        background:
+            radial-gradient(ellipse at 78% 0%, rgba(86, 61, 116, .2), transparent 35%),
+            radial-gradient(ellipse at 8% 50%, rgba(56, 42, 91, .15), transparent 42%),
+            var(--paper);
+    }
     [data-testid="stHeader"] { background: transparent; }
     [data-testid="stMain"] { padding-top: 1.3rem; }
     .block-container { max-width: 1540px; padding: 1.4rem 2.2rem 3rem; }
-    [data-testid="stSidebar"] { background: #fafaf9; border-right: 1px solid #e6e6e3; }
+    [data-testid="stSidebar"] {
+        background: linear-gradient(180deg, #171426 0%, #13111f 100%);
+        border-right: 1px solid rgba(207, 190, 245, .12);
+    }
     [data-testid="stSidebar"] > div:first-child { padding: 1.35rem 1rem; }
-    [data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p { color: #777875; }
-    [data-testid="stRadio"] label p { font-size: .9rem; font-weight: 500; }
+    [data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p { color: var(--muted); }
+    [data-testid="stRadio"] label p { color: #d3cde3; font-size: .9rem; font-weight: 500; }
     [data-testid="stRadio"] > div { gap: .3rem; }
-    h1, h2, h3 { font-family: 'Manrope', sans-serif !important; color: var(--ink); letter-spacing: -.045em; }
+    input[type="radio"] { accent-color: var(--accent) !important; }
+    h1, h2, h3 { font-family: 'Manrope', sans-serif !important; color: #f7f3ff !important; letter-spacing: -.045em; }
     h1 { font-size: 2rem !important; font-weight: 600 !important; }
     h2 { font-size: 1.25rem !important; font-weight: 600 !important; }
     h3 { font-size: 1rem !important; font-weight: 600 !important; }
-    [data-testid="stVerticalBlockBorderWrapper"] { background: white; border-color: var(--line); border-radius: 20px; }
-    [data-testid="stMetric"] { background: #fff; padding: .85rem 1rem; border: 1px solid var(--line); border-radius: 16px; }
-    [data-testid="stMetricLabel"] { color: #777875; font-size: .78rem; }
-    [data-testid="stMetricValue"] { font-family: 'Manrope', sans-serif; font-size: 1.5rem; font-weight: 600; }
+    [data-testid="stVerticalBlockBorderWrapper"] {
+        background: linear-gradient(145deg, rgba(34, 30, 52, .98), rgba(25, 23, 41, .98));
+        border-color: var(--line);
+        border-radius: 20px;
+    }
+    [data-testid="stMetric"] {
+        background: linear-gradient(150deg, #242039, #1a172b);
+        padding: .85rem 1rem;
+        border: 1px solid var(--line);
+        border-radius: 16px;
+    }
+    [data-testid="stMetricLabel"] { color: var(--muted); font-size: .78rem; }
+    [data-testid="stMetricValue"] { font-family: 'Manrope', sans-serif; color: #fff; font-size: 1.5rem; font-weight: 600; }
     [data-testid="stButton"] button, [data-testid="stFormSubmitButton"] button {
-        border-radius: 999px; min-height: 2.55rem; font-weight: 600; border-color: #dededb;
+        border-radius: 999px;
+        min-height: 2.55rem;
+        font-weight: 600;
+        color: #f6f1ff;
+        border-color: rgba(216, 202, 255, .26);
+        background: rgba(255, 255, 255, .04);
     }
     [data-testid="stButton"] button[kind="primary"], [data-testid="stFormSubmitButton"] button[kind="primary"] {
-        background: #171717; color: #fff; border-color: #171717;
+        background: linear-gradient(110deg, #ffc19c, #ed9bb7);
+        color: #21172b;
+        border-color: transparent;
     }
     [data-testid="stTextInput"] input, [data-testid="stTextArea"] textarea, [data-testid="stDateInput"] input,
-    [data-testid="stSelectbox"] [data-baseweb="select"] > div { border-radius: 12px; }
+    [data-testid="stSelectbox"] [data-baseweb="select"] > div {
+        border-radius: 12px;
+        background-color: #211e33;
+        border-color: rgba(216, 202, 255, .2);
+        color: #f7f3ff;
+    }
+    [data-testid="stTextInput"] label, [data-testid="stTextArea"] label,
+    [data-testid="stDateInput"] label, [data-testid="stSelectbox"] label { color: #d3cde3; }
     [data-testid="stDataFrame"] { border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+    [data-testid="stProgressBar"] > div { background-color: rgba(211, 196, 255, .15); }
+    [data-testid="stProgressBar"] > div > div { background: linear-gradient(90deg, #b8a7ff, #ffb38f); }
+    [data-testid="stExpander"] { border-color: var(--line); border-radius: 14px; }
+    [data-testid="stExpander"] summary, [data-testid="stExpander"] p { color: #e5dff2; }
     .brand { display:flex; align-items:center; gap:10px; padding: .25rem .4rem 1.8rem; }
-    .brand-symbol { display:grid; place-items:center; width:34px; height:34px; border-radius:12px; background:#171717; color:#fff; font-size:20px; }
-    .brand-name { font-family:'Manrope',sans-serif; font-size:1rem; font-weight:800; letter-spacing:-.04em; color:#171717; }
-    .eyebrow { color:#858681; font-size:.68rem; font-weight:700; letter-spacing:.13em; text-transform:uppercase; }
-    .page-kicker { color:#82837f; font-size:.8rem; margin-top:-.6rem; }
-    .project-chip { display:inline-flex; align-items:center; gap:7px; padding:7px 11px; border:1px solid #e5e5e2; border-radius:999px; background:#fff; color:#454642; font-size:.77rem; }
-    .live-dot { height:7px; width:7px; border-radius:50%; background:#262626; display:inline-block; }
-    .timeline-note { color:#777875; font-size:.78rem; }
-    .task-label { color:#323330; font-size:.82rem; font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-    .task-sub { color:#8a8b87; font-size:.7rem; }
-    .task-track { height:12px; width:100%; background:#f0f0ee; border-radius:10px; overflow:hidden; }
-    .task-bar { height:100%; background:#1b1b1b; border-radius:10px; min-width:8px; }
-    .mini-line { height:1px; background:#eeeeeb; margin:.85rem 0; }
-    .empty-mark { width:48px; height:48px; border-radius:16px; display:grid; place-items:center; color:white; background:#171717; font-size:23px; margin-bottom:1rem; }
-    .empty-copy { color:#777875; max-width:38rem; line-height:1.6; }
-    .team-panel { min-height:180px; padding:1.35rem 1.5rem; border-radius:20px; color:#fff; background:radial-gradient(ellipse at 82% 110%, #343434 0, #181818 36%, #101010 75%); }
+    .brand-symbol { display:grid; place-items:center; width:34px; height:34px; border-radius:12px; background:linear-gradient(145deg,#ffc19c,#dd9fc8); color:#21172b; font-size:20px; }
+    .brand-name { font-family:'Manrope',sans-serif; font-size:1rem; font-weight:800; letter-spacing:-.04em; color:#fff; }
+    .eyebrow { color:#a99acb; font-size:.68rem; font-weight:700; letter-spacing:.13em; text-transform:uppercase; }
+    .page-kicker { color:#aaa3bf; font-size:.8rem; margin-top:-.6rem; }
+    .project-chip { display:inline-flex; align-items:center; gap:7px; padding:7px 11px; border:1px solid var(--line); border-radius:999px; background:rgba(34,30,52,.9); color:#e7e1f4; font-size:.77rem; }
+    .live-dot { height:7px; width:7px; border-radius:50%; background:var(--accent); display:inline-block; box-shadow:0 0 12px rgba(255,179,143,.8); }
+    .timeline-note { color:var(--muted); font-size:.78rem; }
+    .task-label { color:#f0ebfb; font-size:.82rem; font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .task-sub { color:#aaa3bf; font-size:.7rem; }
+    .task-track { height:12px; width:100%; background:#302b43; border-radius:10px; overflow:hidden; }
+    .task-bar { height:100%; background:linear-gradient(90deg,#b8a7ff,#ffb38f); border-radius:10px; min-width:8px; }
+    .mini-line { height:1px; background:rgba(207,190,245,.13); margin:.85rem 0; }
+    .empty-mark { width:48px; height:48px; border-radius:16px; display:grid; place-items:center; color:#21172b; background:linear-gradient(145deg,#ffc19c,#dd9fc8); font-size:23px; margin-bottom:1rem; }
+    .empty-copy { color:var(--muted); max-width:38rem; line-height:1.6; }
+    .journey-hero {
+        position:relative;
+        isolation:isolate;
+        overflow:hidden;
+        min-height:300px;
+        display:flex;
+        align-items:center;
+        margin:1.35rem 0 1.4rem;
+        padding:2.1rem 2.35rem;
+        border:1px solid rgba(224,205,255,.2);
+        border-radius:26px;
+        background:linear-gradient(115deg,#241a3b 0%,#302048 50%,#8d5870 100%);
+        box-shadow:0 24px 70px rgba(0,0,0,.24);
+    }
+    .journey-hero:after {
+        content:"";
+        position:absolute;
+        z-index:1;
+        inset:0;
+        background:linear-gradient(90deg,rgba(23,18,40,.98) 0%,rgba(28,20,45,.93) 40%,rgba(34,23,49,.16) 100%);
+    }
+    .hero-art { position:absolute; z-index:0; right:0; bottom:0; width:72%; height:100%; }
+    .hero-copy { position:relative; z-index:2; max-width:58%; }
+    .hero-overline { color:#e6c6d6; font-size:.67rem; font-weight:700; letter-spacing:.16em; text-transform:uppercase; }
+    .hero-title { margin:.75rem 0 .65rem; font-family:'Manrope',sans-serif; color:#fff; font-size:clamp(2.2rem,4vw,3.8rem); font-weight:800; line-height:.98; letter-spacing:-.075em; }
+    .hero-title em { color:#ffc09d; font-style:normal; }
+    .hero-description { max-width:34rem; color:#d0c6dc; font-size:.88rem; line-height:1.55; }
+    .hero-footer { display:flex; gap:1.7rem; margin-top:1.25rem; }
+    .hero-date-label { display:block; margin-bottom:.2rem; color:#b7a9c7; font-size:.6rem; font-weight:700; letter-spacing:.15em; }
+    .hero-date-value { color:#fff; font-size:.78rem; font-weight:600; }
+    .hero-date-divider { width:1px; background:rgba(255,255,255,.25); }
+    .team-panel { min-height:180px; padding:1.35rem 1.5rem; border:1px solid rgba(214,191,255,.18); border-radius:20px; color:#fff; background:radial-gradient(ellipse at 82% 110%, #765271 0, #29213d 38%, #1a1729 78%); }
     .team-panel-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:1.55rem; }
     .team-panel-title { font-family:'Manrope',sans-serif; font-size:1.15rem; font-weight:600; letter-spacing:-.04em; }
-    .team-panel-count { font-size:.72rem; color:#d5d5d2; border:1px solid #555; border-radius:999px; padding:4px 9px; }
+    .team-panel-count { font-size:.72rem; color:#e0d7e9; border:1px solid rgba(255,255,255,.3); border-radius:999px; padding:4px 9px; }
     .team-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(125px,1fr)); gap:1rem; }
-    .team-person { border-top:1px solid #424242; padding-top:.85rem; }
-    .team-avatar { display:grid; place-items:center; width:34px; height:34px; border-radius:50%; background:#303030; color:#fff; font-size:.72rem; font-weight:700; margin-bottom:.55rem; }
+    .team-person { border-top:1px solid rgba(255,255,255,.2); padding-top:.85rem; }
+    .team-avatar { display:grid; place-items:center; width:34px; height:34px; border-radius:50%; background:linear-gradient(145deg,#ffc19c,#dd9fc8); color:#21172b; font-size:.72rem; font-weight:700; margin-bottom:.55rem; }
     .team-person-name { font-size:.8rem; font-weight:600; color:#fff; }
-    .team-person-skills { color:#aaa; font-size:.68rem; margin-top:.15rem; }
+    .team-person-skills { color:#c2b8d0; font-size:.68rem; margin-top:.15rem; }
     @media (max-width: 850px) {
         .block-container { padding: 1rem .8rem 2rem; }
         h1 { font-size:1.65rem !important; }
+        .journey-hero { min-height:280px; padding:1.5rem; }
+        .hero-copy { max-width:80%; }
+        .hero-art { width:100%; opacity:.64; }
     }
     </style>
     """,
@@ -254,11 +326,83 @@ def render_schedule(tasks, compact=False):
         st.caption(f"+ {len(tasks) - 6} more scheduled tasks")
 
 
+def render_hero(project=None):
+    if project:
+        project_name = html.escape(str(project.get("project_name", "Active project")))
+        description = str(project.get("description", "A plan for the work ahead.")).strip()
+        description = html.escape(description[:180] + ("..." if len(description) > 180 else ""))
+        overline = f"ACTIVE PROJECT  /  {project_name}"
+        title = "Your plan,<br><em>in motion.</em>"
+        deadline = html.escape(str(project.get("deadline", "Not set")))
+        status = html.escape(str(project.get("plan", {}).get("deadline_feasible", "Review")))
+    else:
+        description = "Shape your requirements into a clear plan, give your team a path forward, and keep every milestone in view."
+        overline = "CODERS PROJECT WORKSPACE  /  PLAN THE JOURNEY"
+        title = "Turn ideas into<br><em>clear plans.</em>"
+        deadline = "Start with a deadline"
+        status = "Project overview"
+
+    st.markdown(
+        f"""
+        <div class="journey-hero">
+          <svg class="hero-art" viewBox="0 0 900 440" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+            <defs>
+              <linearGradient id="sky" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#54426e"/>
+                <stop offset=".58" stop-color="#b66d80"/>
+                <stop offset="1" stop-color="#f2a178"/>
+              </linearGradient>
+              <linearGradient id="ridge" x1="0" y1="0" x2="0" y2="1">
+                <stop stop-color="#9b7195"/>
+                <stop offset="1" stop-color="#443452"/>
+              </linearGradient>
+              <linearGradient id="valley" x1="0" y1="0" x2="1" y2="1">
+                <stop stop-color="#563e68"/>
+                <stop offset="1" stop-color="#211b35"/>
+              </linearGradient>
+              <radialGradient id="glow">
+                <stop stop-color="#ffd1a6" stop-opacity=".85"/>
+                <stop offset="1" stop-color="#ffb38f" stop-opacity="0"/>
+              </radialGradient>
+            </defs>
+            <rect width="900" height="440" fill="url(#sky)"/>
+            <circle cx="650" cy="145" r="155" fill="url(#glow)"/>
+            <circle cx="650" cy="145" r="54" fill="#ffd1a6" opacity=".8"/>
+            <path d="M245 330 455 95 570 222 684 74 900 310 900 440 210 440Z" fill="url(#ridge)" opacity=".76"/>
+            <path d="m435 118 20-23 23 25-16-5-11 13-7-11-12 7Z" fill="#f3c7c0" opacity=".76"/>
+            <path d="m659 102 25-28 29 32-19-7-11 13-10-12-14 8Z" fill="#f7c4b8" opacity=".72"/>
+            <path d="M170 363 340 226 474 323 621 208 900 372 900 440 130 440Z" fill="#684d72"/>
+            <path d="M260 389 476 303 570 359 730 248 900 351 900 440 170 440Z" fill="url(#valley)"/>
+            <path d="M510 440c70-67 130-83 220-104 62-16 108-43 170-96v200Z" fill="#332642" opacity=".78"/>
+            <path d="M595 440c42-46 97-55 145-66 59-14 98-33 160-75" fill="none" stroke="#ffd0ad" stroke-opacity=".42" stroke-width="3"/>
+            <g fill="#fff0df" opacity=".82">
+              <circle cx="500" cy="68" r="2"/><circle cx="565" cy="42" r="1.5"/>
+              <circle cx="738" cy="57" r="2"/><circle cx="812" cy="116" r="1.5"/>
+              <circle cx="580" cy="185" r="1.5"/><circle cx="840" cy="205" r="2"/>
+            </g>
+          </svg>
+          <div class="hero-copy">
+            <div class="hero-overline">{overline}</div>
+            <div class="hero-title">{title}</div>
+            <div class="hero-description">{description}</div>
+            <div class="hero-footer">
+              <div><span class="hero-date-label">DEADLINE</span><span class="hero-date-value">{deadline}</span></div>
+              <div class="hero-date-divider"></div>
+              <div><span class="hero-date-label">STATUS</span><span class="hero-date-value">{status}</span></div>
+            </div>
+          </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
 if page == "New project":
     with st.container(border=True):
         create_project_form()
 
 elif page == "Overview":
+    render_hero(project)
     if not project:
         with st.container(border=True):
             st.markdown('<div class="empty-mark">＋</div>', unsafe_allow_html=True)
@@ -275,12 +419,6 @@ elif page == "Overview":
         tasks = plan.get("tasks", [])
         completed = sum(1 for task in tasks if str(task.get("status", "")).lower() == "completed")
         completion = round(100 * completed / len(tasks)) if tasks else 0
-        st.markdown(
-            f'<div style="margin:1rem 0 1rem"><span class="project-chip"><span class="live-dot"></span>'
-            f'{html.escape(str(project.get("project_name", "Project")))} &nbsp; · &nbsp; '
-            f'Due {html.escape(str(project.get("deadline", "Not set")))}</span></div>',
-            unsafe_allow_html=True,
-        )
         metrics = st.columns(4)
         metrics[0].metric("Total tasks", len(tasks))
         metrics[1].metric("Estimated effort", f'{plan.get("total_duration_days", 0)} days')
